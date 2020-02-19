@@ -1,0 +1,56 @@
+#! user/bin/env python3
+
+def main():
+    protein_dict = {
+        'ATA':'I', 'ATC':'I', 'ATT':'I', 'ATG':'M',
+        'ACA':'T', 'ACC':'T', 'ACG':'T', 'ACT':'T',
+        'AAC':'N', 'AAT':'N', 'AAA':'K', 'AAG':'K',
+        'AGC':'S', 'AGT':'S', 'AGA':'R', 'AGG':'R',
+        'CTA':'L', 'CTC':'L', 'CTG':'L', 'CTT':'L',
+        'CCA':'P', 'CCC':'P', 'CCG':'P', 'CCT':'P',
+        'CAC':'H', 'CAT':'H', 'CAA':'Q', 'CAG':'Q',
+        'CGA':'R', 'CGC':'R', 'CGG':'R', 'CGT':'R',
+        'GTA':'V', 'GTC':'V', 'GTG':'V', 'GTT':'V',
+        'GCA':'A', 'GCC':'A', 'GCG':'A', 'GCT':'A',
+        'GAC':'D', 'GAT':'D', 'GAA':'E', 'GAG':'E',
+        'GGA':'G', 'GGC':'G', 'GGG':'G', 'GGT':'G',
+        'TCA':'S', 'TCC':'S', 'TCG':'S', 'TCT':'S',
+        'TTC':'F', 'TTT':'F', 'TTA':'L', 'TTG':'L',
+        'TAC':'Y', 'TAT':'Y', 'TAA':'Stop', 'TAG':'Stop',
+        'TGC':'C', 'TGT':'C', 'TGA':'Stop', 'TGG':'W'
+    }
+    with open('rosalind_splc.txt', 'r') as inp:
+        raw_sequences = inp.read().split('>')
+    dna_raw = raw_sequences[1].split('\n')
+    dna = ''.join(dna_raw[1:])
+    dna_length = len(dna)
+    file_length = len(raw_sequences)
+    introns = []
+    for a in range(2,file_length):
+        temp = raw_sequences[a].split('\n')
+        introns.append(''.join(temp[1:]))
+    for intron in introns:
+        dna_length = len(dna)
+        n = len(intron)
+        for i in range(dna_length):
+            window = dna[i:i+n]
+            if window == intron:
+                intron_location = i
+                break
+        dna = dna[:intron_location] + dna[(intron_location+n):]   
+    final_dna_length = len(dna)
+    protein_str = ''
+    for b in range(0,final_dna_length,3):
+        codon = dna[b:b+3]
+        protein = protein_dict[codon]
+        if protein == 'Stop':
+            break
+        else:
+            protein_str += protein
+    print(protein_str)
+
+
+
+
+if __name__ == '__main__':
+    main()

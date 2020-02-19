@@ -1,0 +1,32 @@
+#!/usr/bin/env python
+
+
+def main():
+    with open('rosalind_gc.txt', 'r') as doc:
+        sequences = doc.read().split('>')
+    seq_dic = {}
+    test = ''
+    for a in sequences:
+        if a == '':
+            clean = True
+        seq_dic[a.split('\n')[0]] = test.join(a.split('\n')[1:])
+    if clean:
+        seq_dic.pop('')
+    seq_GCcontent = {}
+    for seq_label in seq_dic.keys():
+        seq_GCcontent[seq_label] = gccontent(seq_dic[seq_label])
+    maxkey = max(seq_GCcontent, key=seq_GCcontent.get)
+    print(maxkey + ('\n') + seq_GCcontent[maxkey])
+
+
+def gccontent(sequence):
+    CGcount = 0
+    total = 0
+    for base in sequence:
+        if base in 'CG':
+            CGcount += 1
+        total += 1
+    return '{:.5%}'.format(CGcount/total)
+
+if __name__ == "__main__":
+    main()

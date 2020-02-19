@@ -1,0 +1,28 @@
+#!/user/bin/env python3
+
+def main():
+    with open('rosalind_grph.txt', 'r') as stringfile:
+        raw_strings = []
+        raw_strings = stringfile.read().split('>')
+        string_dic = {}
+        for rawstr in raw_strings:
+            substrs = rawstr.split('\n')
+            seq = ''.join(substrs[1:])
+            string_dic[substrs[0]] = seq
+        for DNA_str1_name in string_dic.keys():
+            best_matches = []
+            DNA_str1_seq = string_dic[DNA_str1_name]
+            for DNA_str2_name in string_dic.keys():      
+                if DNA_str1_name != DNA_str2_name:
+                    DNA_str2_seq = string_dic[DNA_str2_name]
+                    seq_len = len(DNA_str1_seq)  
+                    if DNA_str1_seq[seq_len-(3):] == DNA_str2_seq[:3]:
+                        best_matches.append(DNA_str2_name)
+                        #print('{} paired w/ {}'.format(DNA_str1_name, DNA_str2_name))
+                        #print('Seq 1: {} \nSeq 2: {}'.format(DNA_str1_seq, DNA_str2_seq))
+                        #print('Comparing {} to {}'.format(DNA_str1_seq[seq_len-(3):], DNA_str2_seq[:3]))
+            for match in set(best_matches):
+                print("{}\t{}".format(DNA_str1_name, match))
+
+if __name__ == '__main__':
+    main()
